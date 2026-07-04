@@ -1,0 +1,12 @@
+# dev/build outputs
+dist
+.wrangler
+
+# Node dependencies
+node_modules
+
+# Logs
+*.log
+
+# Local env files
+.dev.vars
