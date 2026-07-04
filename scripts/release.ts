@@ -49,13 +49,17 @@ async function promptBumpType(): Promise<BumpType> {
   return choice as BumpType;
 }
 
+async function tagExists(version: string): Promise<boolean> {
+  const result = await x('git', ['tag', '-l', `v${version}`]);
+  return result.stdout.trim() !== '';
+}
+
 async function inferBumpTypeFromCommits(currentVersion: string): Promise<BumpType> {
-  const tagCheck = await x('git', ['tag', '-l', `v${currentVersion}`]);
-  const tagExists = tagCheck.stdout.trim() !== '';
-  if (!tagExists) {
+  const hasTag = await tagExists(currentVersion);
+  if (!hasTag) {
     consola.warn(`Tag v${currentVersion} not found, analyzing recent commits`);
   }
-  const range = tagExists ? `v${currentVersion}..HEAD` : 'HEAD~20..HEAD';
+  const range = hasTag ? `v${currentVersion}..HEAD` : 'HEAD~20..HEAD';
   const result = await x('git', ['log', range, '--format=%s']);
   const subjects = result.stdout.trim().split('\n').filter(Boolean);
   if (subjects.some((s) => /^[a-z]+(\(.+\))?!:/.test(s) || s.includes('BREAKING CHANGE'))) return 'major';
@@ -153,12 +157,18 @@ async function run(): Promise<void> {
   );
 
   // Generate changelog
-  await runCmd(
-    'changelogen',
-    ['--output', 'CHANGELOG.md', '--from', `v${currentVersion}`, '-r', newVersion],
-    dryRun,
-    `changelogen --output CHANGELOG.md --from v${currentVersion} -r ${newVersion}`,
-  );
+  const hasCurrentTag = await tagExists(currentVersion);
+  const changelogenArgs = [
+    '--output',
+    'CHANGELOG.md',
+    ...(hasCurrentTag ? ['--from', `v${currentVersion}`] : []),
+    '-r',
+    newVersion,
+  ];
+  if (!hasCurrentTag) {
+    consola.warn(`Tag v${currentVersion} not found, generating changelog from full history`);
+  }
+  await runCmd('changelogen', changelogenArgs, dryRun, `changelogen ${changelogenArgs.join(' ')}`);
   if (!dryRun) consola.success('Changelog generated');
 
   // Format changed files before committing
