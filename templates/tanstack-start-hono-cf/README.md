@@ -15,6 +15,8 @@ pnpm ワークスペースによるモノリポ構成です。
 pnpm install
 ```
 
+`pnpm-lock.yaml` はテンプレートに含まれていないため、`pnpm install` 実行後に生成されたロックファイルをコミットしてください。CI（`.github/workflows/ci.yaml`）は `pnpm install --frozen-lockfile` を使用するため、ロックファイルが存在しない状態で PR を作成すると CI が失敗します。
+
 ## 開発
 
 ```bash
@@ -39,3 +41,7 @@ Biome が JS/TS の formatter と linter を担い、ESLint は React Hooks の�
 pnpm lint       # eslint + biome + prettier のチェック
 pnpm lint:fix   # 上記の自動修正
 ```
+
+## CI
+
+`.github/workflows/ci.yaml` が Pull Request 作成時に `eslint:ci` → `biome:ci` → `prettier:ci` → `typecheck` を順に実行します（Draft PR ではスキップされます）。Node.js / pnpm のセットアップは `.github/actions/node-install` の composite action に切り出されており、バージョンは入力で上書きできます。
