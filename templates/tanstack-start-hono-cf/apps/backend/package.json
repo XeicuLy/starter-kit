@@ -1,6 +1,7 @@
 {
   "name": "backend",
   "type": "module",
+  "types": "./src/index.ts",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
@@ -10,10 +11,10 @@
   "dependencies": {
     "@hono/swagger-ui": "0.6.1",
     "@hono/zod-openapi": "1.4.0",
-    "hono": "4.12.27",
+    "hono": "4.12.29",
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "wrangler": "4.107.0"
+    "wrangler": "4.110.0"
   }
 }
