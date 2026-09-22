@@ -4,6 +4,11 @@
       "id": "tanstack-start-hono-cf",
       "name": "TanStack Start + Hono (CF Workers)",
       "description": "TanStack Start + Hono deployed to Cloudflare Workers"
+    },
+    {
+      "id": "sandbox",
+      "name": "まっさらなプロジェクト",
+      "description": "commitlintやplugin設定等、フレームワークに依存しない共通設定のみのテンプレート"
     }
   ]
 }

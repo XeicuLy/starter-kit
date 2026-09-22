@@ -4,6 +4,7 @@
 
 ## テンプレート一覧
 
-| ID                       | 名前                               | 説明                                                 |
-| ------------------------ | ---------------------------------- | ---------------------------------------------------- |
-| `tanstack-start-hono-cf` | TanStack Start + Hono (CF Workers) | TanStack Start + Hono deployed to Cloudflare Workers |
+| ID                       | 名前                               | 説明                                                                           |
+| ------------------------ | ---------------------------------- | ------------------------------------------------------------------------------ |
+| `tanstack-start-hono-cf` | TanStack Start + Hono (CF Workers) | TanStack Start + Hono deployed to Cloudflare Workers                           |
+| `sandbox`                | まっさらなプロジェクト             | commitlintやplugin設定等、フレームワークに依存しない共通設定のみのテンプレート |
